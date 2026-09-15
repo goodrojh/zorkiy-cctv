@@ -44,13 +44,13 @@ const KF_DETECT: KF[] = [
 
 /** Ролик 2: реакция и побег */
 const EVENTS_ESCAPE: Ev[] = [
-  { t: 0.0, label: "ПРОЖЕКТОР ВКЛ · СИРЕНА 110 дБ", tone: "red" },
-  { t: 1.5, label: "ГОЛОСОВОЕ ПРЕДУПРЕЖДЕНИЕ ЧЕРЕЗ ДИНАМИК", tone: "red" },
-  { t: 3.0, label: "НАРУШИТЕЛЬ ПОКИДАЕТ ТЕРРИТОРИЮ", tone: "amber" },
-  { t: 5.2, label: "ПЕРИМЕТР ЧИСТ · КЛИП ОТПРАВЛЕН ВЛАДЕЛЬЦУ", tone: "green" },
+  { t: 0.0, label: "ЧЕЛОВЕК У ВОРОТ · ПРОЖЕКТОР ВКЛ", tone: "red" },
+  { t: 1.0, label: "СИРЕНА 110 дБ · ГОЛОСОВОЕ ПРЕДУПРЕЖДЕНИЕ", tone: "red" },
+  { t: 2.2, label: "НАРУШИТЕЛЬ ПОКИДАЕТ ТЕРРИТОРИЮ", tone: "amber" },
+  { t: 4.6, label: "ПЕРИМЕТР ЧИСТ · КЛИП ОТПРАВЛЕН ВЛАДЕЛЬЦУ", tone: "green" },
 ];
 const KF_ESCAPE: KF[] = [
-  [0, 30, 26, 10, 28], [1, 34, 20, 10, 28], [2, 36, 20, 10, 27], [3, 30, 10, 10, 30], [4, 26, 4, 10, 30],
+  [0, 19, 40, 14, 52], [1, 27, 36, 15, 46], [2, 41, 27, 10, 27], [3, 48, 12, 8, 18], [4, 51, 8, 6, 12],
 ];
 
 function toneBorder(t: Tone) {
@@ -136,7 +136,7 @@ function CctvClip({
       {!hideBox && (
         <motion.div
           animate={{ left: box.x + "%", top: box.y + "%", width: box.w + "%", height: box.h + "%" }}
-          transition={{ type: "spring", stiffness: 60, damping: 18 }}
+          transition={t < 0.35 ? { duration: 0 } : { type: "spring", stiffness: 60, damping: 18 }}
           className={"absolute border-2 " + toneBorder(current.tone)}
           style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.4)" }}
         >
@@ -211,18 +211,18 @@ export default function Prevented() {
             <div>
               <div className="flex items-center gap-2 mb-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/50">
                 <span className="w-5 h-5 rounded-full bg-accent/20 border border-accent/50 text-accent flex items-center justify-center text-[10px] font-bold">2</span>
-                Реакция и побег · +6 секунд
+                Реакция и побег · склад, Домодедово
               </div>
               <CctvClip
-                cam="CAM 03 · ДВОР · ПРОЖЕКТОР ВКЛ"
+                cam="CAM 02 · СКЛАД · ВОРОТА"
                 srcDesktop={media("escape-web.mp4")}
                 srcMobile={media("escape-mobile.mp4")}
                 poster={media("escape.webp")}
                 events={EVENTS_ESCAPE}
                 keyframes={KF_ESCAPE}
-                boxLabel={(tone) => (tone === "green" ? "ПЕРИМЕТР ЧИСТ" : "УХОДИТ")}
-                startClock={14}
-                hideBoxAfter={4.9}
+                boxLabel={(tone) => (tone === "green" ? "ПЕРИМЕТР ЧИСТ" : tone === "amber" ? "УХОДИТ" : "ЧЕЛОВЕК 96%")}
+                startClock={0}
+                hideBoxAfter={4.4}
                 delay={0.15}
               />
             </div>
