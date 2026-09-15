@@ -40,7 +40,7 @@ export default function Cases() {
   const { openLead } = useLead();
   return (
     <section id="cases" className="bg-[#F6F8F7] py-20 px-5 md:px-20">
-      <div className="max-w-[1200px] mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10">
           <div className="max-w-2xl">
             <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-accent-dark">2 470+ объектов с 2014 года</span>
@@ -72,7 +72,7 @@ export default function Cases() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-white border border-[#E6EAE8] rounded-[18px] p-4 md:p-5 flex flex-col transition-all duration-200 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] group"
+              className="bg-white border border-[#E6EAE8] rounded-[18px] p-4 md:p-5 flex flex-col transition-shadow duration-200 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] group"
             >
               <div className="w-full h-[220px] rounded-[12px] overflow-hidden mb-4 relative">
                 <img src={media(c.img)} alt={c.tag} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />

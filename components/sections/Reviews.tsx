@@ -41,7 +41,7 @@ const REVIEWS = [
 export default function Reviews() {
   return (
     <section id="reviews" className="bg-white py-20 px-5 md:px-10">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-[1fr_1.6fr] gap-10 lg:gap-16 items-start">
           <div>
             <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-accent-dark">1 180+ отзывов</span>

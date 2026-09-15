@@ -24,39 +24,21 @@ export default function Solutions() {
   const { openLead } = useLead();
   return (
     <section id="solutions" className="bg-white py-20 px-0 md:px-6">
-      <div className="max-w-[1300px] mx-auto px-5 md:px-0">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 md:mb-10">
+      <div className="max-w-7xl mx-auto px-5 md:px-0">
+        <div className="mb-8 md:mb-10">
           <div className="flex-1">
             <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-[42px] text-night mb-2 leading-tight">
               Решения под ваш объект
             </h2>
             <p className="text-[15px] text-gray-500">Цены «под ключ» с оборудованием и монтажом. Уточним на бесплатном выезде.</p>
           </div>
-          <button
-            onClick={() =>
-              openLead({
-                source: "solutions-custom",
-                title: "Нестандартный объект?",
-                subtitle: "Опишите задачу — подготовим индивидуальное решение и смету за 24 часа.",
-                cta: "Получить решение",
-                fields: ["name", "phone", "comment"],
-              })
-            }
-            className="rounded-full px-6 py-2.5 text-sm font-semibold text-ink bg-accent hover:bg-accent-glow transition-colors"
-          >
-            Мой объект — другой
-          </button>
         </div>
       </div>
 
-      <div className="max-w-[1300px] mx-auto px-5 md:px-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        {SOLUTIONS.map((s, i) => (
+      <div className="max-w-7xl mx-auto px-5 md:px-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {SOLUTIONS.map((s) => (
           <motion.button
             key={s.id}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "0px 0px -40px 0px" }}
-            transition={{ delay: (i % 5) * 0.06 }}
             whileHover={{ y: -4 }}
             onClick={() =>
               openLead({
@@ -68,7 +50,7 @@ export default function Solutions() {
                 extra: { Решение: s.name },
               })
             }
-            className="text-left bg-[#F6F8F7] border border-[#E6EAE8] rounded-[18px] p-5 md:p-6 flex flex-col gap-3 transition-all duration-200 hover:bg-white hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] relative min-h-[220px]"
+            className="text-left bg-[#F6F8F7] border border-[#E6EAE8] rounded-[18px] p-5 md:p-6 flex flex-col gap-3 transition-[background-color,box-shadow] duration-200 hover:bg-white hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] relative min-h-[220px]"
           >
             {s.hot && (
               <span className="absolute top-4 right-4 text-[10px] font-bold tracking-wider uppercase bg-alert text-white px-2 py-0.5 rounded-full">
@@ -91,6 +73,31 @@ export default function Solutions() {
             </span>
           </motion.button>
         ))}
+      </div>
+
+      <div className="max-w-7xl mx-auto px-5 md:px-0 mt-8 md:mt-10">
+        <div className="rounded-[20px] border border-dashed border-gray-300 bg-white p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div className="font-display font-bold text-xl text-night">Тут нет моего объекта</div>
+            <p className="text-[14px] text-gray-500 mt-1">
+              Гостиница, автосервис, ферма, коттеджный посёлок, храм — делали и такое. Опишите задачу, подготовим решение и смету за 24 часа.
+            </p>
+          </div>
+          <button
+            onClick={() =>
+              openLead({
+                source: "solutions-custom",
+                title: "Нестандартный объект?",
+                subtitle: "Опишите задачу — подготовим индивидуальное решение и смету за 24 часа.",
+                cta: "Получить решение",
+                fields: ["name", "phone", "comment"],
+              })
+            }
+            className="shrink-0 rounded-full px-6 py-3 text-sm font-bold text-ink bg-accent hover:bg-accent-glow transition-colors"
+          >
+            Тут нет моего объекта
+          </button>
+        </div>
       </div>
     </section>
   );

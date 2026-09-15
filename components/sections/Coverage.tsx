@@ -15,7 +15,7 @@ export default function Coverage() {
   const { openLead } = useLead();
   return (
     <section id="coverage" className="bg-night text-white py-20 px-5 md:px-10 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_1.2fr] gap-10 items-center relative z-10">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.2fr] gap-10 items-center relative z-10">
         {/* Radar */}
         <div className="relative aspect-square max-w-[420px] w-full mx-auto">
           <div className="absolute inset-0 rounded-full border border-accent/20" />

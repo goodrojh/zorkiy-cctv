@@ -6,12 +6,14 @@ import type { Variants } from "framer-motion";
 import { Moon, Smartphone, Bell, Cloud, Check, Cpu, Siren, ShieldCheck, Eye } from "lucide-react";
 import { media } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 const containerVariants: Variants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } };
 const cardVariants: Variants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } };
 
 export default function Features() {
   const { openLead } = useLead();
+  const isMobile = useIsMobile();
   return (
     <section id="features" className="w-full px-5 md:px-6 py-20 md:py-[120px] bg-white relative overflow-hidden">
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
@@ -50,7 +52,7 @@ export default function Features() {
         <motion.div
           variants={cardVariants}
           whileHover={{ y: -5, transition: { duration: 0.2 } }}
-          className="bg-white rounded-[28px] md:rounded-[32px] border border-gray-200 p-5 md:p-6 flex flex-col gap-8 group transition-all relative overflow-hidden min-h-[440px]"
+          className="bg-white rounded-[28px] md:rounded-[32px] border border-gray-200 p-5 md:p-6 flex flex-col gap-8 group relative overflow-hidden min-h-[440px]"
         >
           <div className="absolute inset-0 z-0">
             <img
@@ -74,7 +76,7 @@ export default function Features() {
               { icon: Moon, t: "0.0005 лк", d: "Цветная картинка при свете луны, ИК-подсветка до 60 м." },
               { icon: Eye, t: "4–8 Мп", d: "Лицо на 15 м, номер на 25 м. Не «серые пиксели»." },
             ].map((f) => (
-              <div key={f.t} className="flex flex-col gap-3 p-4 md:p-5 rounded-[20px] bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 transition group/item">
+              <div key={f.t} className="flex flex-col gap-3 p-4 md:p-5 rounded-[20px] bg-white/10 md:backdrop-blur-xl border border-white/20 hover:bg-white/20 transition-colors group/item">
                 <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shrink-0 transition-transform group-hover/item:scale-110">
                   <f.icon className="h-5 w-5 text-white" />
                 </div>
@@ -100,6 +102,7 @@ export default function Features() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.5 }}
               className="absolute top-4 left-4 right-4 sm:right-auto sm:w-[300px] bg-white/90 backdrop-blur-xl rounded-2xl p-3 shadow-xl border border-white flex items-start gap-3"
             >
@@ -137,19 +140,19 @@ export default function Features() {
           whileHover={{ y: -5, transition: { duration: 0.2 } }}
           className="bg-white rounded-[28px] md:rounded-[32px] border border-gray-200 overflow-hidden flex flex-col"
         >
-          <div className="bg-gray-50 h-72 relative flex items-center justify-center overflow-hidden border-b border-gray-200 p-6 md:p-8">
+          <div className="bg-gray-50 min-h-[18rem] relative flex items-center justify-center overflow-hidden border-b border-gray-200 px-6 py-8 md:px-8 md:py-10">
             <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-white to-sky-50" />
             <motion.div
-              animate={{ y: [0, -12, 0], rotate: [0, 5, 0] }}
+              animate={isMobile ? undefined : { y: [0, -12, 0], rotate: [0, 5, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-8 right-8 w-14 h-14 rounded-2xl bg-white/60 backdrop-blur-md border border-white shadow-lg flex items-center justify-center"
+              className="absolute top-6 right-6 md:top-8 md:right-8 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-white/80 md:backdrop-blur-md border border-white shadow-lg flex items-center justify-center"
             >
               <Siren className="h-6 w-6 text-alert" />
             </motion.div>
             <motion.div
-              animate={{ y: [0, 12, 0], rotate: [0, -5, 0] }}
+              animate={isMobile ? undefined : { y: [0, 12, 0], rotate: [0, -5, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-8 left-8 w-14 h-14 rounded-2xl bg-white/60 backdrop-blur-md border border-white shadow-lg flex items-center justify-center"
+              className="absolute bottom-6 left-6 md:bottom-8 md:left-8 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-white/80 md:backdrop-blur-md border border-white shadow-lg flex items-center justify-center"
             >
               <ShieldCheck className="h-6 w-6 text-accent-dark" />
             </motion.div>
@@ -158,6 +161,7 @@ export default function Features() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 className="bg-white rounded-2xl p-3.5 shadow-xl border border-accent/20 flex items-center gap-3 w-full mb-7 relative"
               >
                 <div className="w-10 h-10 rounded-xl bg-night flex items-center justify-center shrink-0">
@@ -179,8 +183,9 @@ export default function Features() {
                     key={a.t}
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
                     transition={{ delay: 0.2 + i * 0.1 }}
-                    className="bg-white/80 backdrop-blur-md rounded-xl p-2.5 shadow-lg border border-white flex flex-col gap-1.5 items-center text-center"
+                    className="bg-white/90 rounded-xl p-2.5 shadow-lg border border-white flex flex-col gap-1.5 items-center text-center"
                   >
                     <div className="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center">
                       <a.icon className="h-4 w-4 text-accent-dark" />
@@ -192,6 +197,7 @@ export default function Features() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.5 }}
                 className="mt-6 bg-accent text-ink text-[10px] font-bold py-2 px-4 rounded-full shadow-lg shadow-accent/30 flex items-center gap-2"
               >
@@ -216,7 +222,7 @@ export default function Features() {
         >
           <div className="bg-gray-50 h-72 relative flex flex-col items-center justify-center border-b border-gray-200 p-6 md:p-8">
             <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-white to-sky-50" />
-            <div className="w-full h-full bg-white/70 backdrop-blur-xl rounded-2xl border border-white shadow-2xl p-5 flex flex-col gap-4 relative z-10">
+            <div className="w-full h-full bg-white/85 md:backdrop-blur-xl rounded-2xl border border-white shadow-2xl p-5 flex flex-col gap-4 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-accent/15 flex items-center justify-center">
@@ -231,7 +237,7 @@ export default function Features() {
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="w-1.5 h-6 bg-accent/15 rounded-full overflow-hidden">
                       <motion.div
-                        animate={{ height: ["20%", "90%", "20%"] }}
+                        animate={isMobile ? { height: "60%" } : { height: ["20%", "90%", "20%"] }}
                         transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4, ease: "easeInOut" }}
                         className="w-full bg-accent"
                       />
@@ -245,6 +251,7 @@ export default function Features() {
                     <motion.div
                       initial={{ height: 0 }}
                       whileInView={{ height: h + "%" }}
+                      viewport={{ once: true }}
                       transition={{ duration: 1.2, delay: i * 0.06, ease: "easeOut" }}
                       className="w-full bg-gradient-to-t from-accent/70 to-accent rounded-t-md"
                     />
