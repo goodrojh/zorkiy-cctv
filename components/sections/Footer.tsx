@@ -166,10 +166,22 @@ export default function Footer() {
           </div>
           <div className="mt-6 pt-5 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-3 text-[12px] text-white/40">
             <span>© {new Date().getFullYear()} ЗОРКИЙ. Видеонаблюдение под ключ в Москве и МО.</span>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
               <a href="#" className="hover:text-white">Политика конфиденциальности</a>
               <a href="#" className="hover:text-white">Договор-оферта</a>
             </div>
+            <a
+              href="https://odinpotok.ru"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-1.5 hover:text-white transition-colors"
+            >
+              Сайт разработан компанией{" "}
+              <span className="font-semibold text-white/70 group-hover:text-accent underline decoration-white/20 underline-offset-4 group-hover:decoration-accent transition-colors">
+                Один поток
+              </span>
+              <span className="text-[10px] transition-transform group-hover:translate-x-0.5">↗</span>
+            </a>
           </div>
         </motion.footer>
       </div>
