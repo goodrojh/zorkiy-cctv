@@ -6,6 +6,7 @@ import { Phone, Mail, MapPin, Clock, Send, Check } from "lucide-react";
 import { SITE, media } from "@/lib/site";
 import { Logo } from "./Nav";
 import { useLead } from "@/components/ui/LeadProvider";
+import PhoneInput, { formatRuPhone } from "@/components/ui/PhoneInput";
 
 export default function Footer() {
   const { openLead } = useLead();
@@ -19,7 +20,7 @@ export default function Footer() {
       subtitle: "Уточним пару деталей — и инженер пришлёт расчёт в мессенджер уже завтра.",
       cta: "Получить смету",
       fields: ["name", "phone", "object"],
-      extra: phone ? { "Телефон из футера": phone } : undefined,
+      extra: phone ? { "Телефон из футера": formatRuPhone(phone) } : undefined,
     });
   };
 
@@ -60,13 +61,11 @@ export default function Footer() {
             transition={{ duration: 0.8, delay: 0.25 }}
             className="mt-8 w-full max-w-[560px] h-16 glass rounded-full flex overflow-hidden p-1.5"
           >
-            <input
-              type="tel"
-              inputMode="tel"
+            <PhoneInput
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+7 (___) ___-__-__"
-              className="flex-1 min-w-0 bg-transparent px-5 text-[15px] text-white placeholder:text-white/50 outline-none border-none font-mono"
+              onChange={setPhone}
+              aria-label="Телефон"
+              className="flex-1 min-w-0 bg-transparent px-5 text-[15px] text-white outline-none border-none font-mono"
             />
             <button type="submit" className="h-full px-5 sm:px-8 bg-accent text-ink rounded-full text-[13px] font-bold tracking-[0.08em] hover:bg-accent-glow transition-colors whitespace-nowrap flex items-center gap-2">
               <Send className="w-4 h-4" /> <span className="hidden sm:inline">ПОЛУЧИТЬ СМЕТУ</span><span className="sm:hidden">СМЕТА</span>

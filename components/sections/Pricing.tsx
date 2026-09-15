@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Check, ArrowUpRight } from "lucide-react";
+import { Check } from "lucide-react";
 import { media } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";
 
@@ -150,23 +150,7 @@ export default function Pricing() {
       </motion.div>
 
       <div className="mt-8 md:mt-10 text-center px-5">
-        <p className="text-sm text-gray-500">
-          Рассрочка 0% на 6 месяцев от банка-партнёра · Для юрлиц — работаем с НДС и по 44-ФЗ
-        </p>
-        <button
-          onClick={() =>
-            openLead({
-              source: "pricing-installment",
-              title: "Рассрочка 0% на 6 месяцев",
-              subtitle: "Одобрение за 5 минут онлайн, без первого взноса. Оставьте номер — расскажем условия.",
-              cta: "Узнать условия",
-              fields: ["name", "phone"],
-            })
-          }
-          className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-night underline decoration-accent decoration-2 underline-offset-4 hover:text-accent-dark"
-        >
-          Узнать про рассрочку <ArrowUpRight className="w-3.5 h-3.5" />
-        </button>
+        <p className="text-sm text-gray-500">Для юрлиц — работаем с НДС, по договору и 44-ФЗ. Оплата после установки и проверки.</p>
       </div>
     </section>
   );

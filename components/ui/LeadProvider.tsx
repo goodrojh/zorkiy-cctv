@@ -4,6 +4,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Phone, Check, ShieldCheck, Send, Loader2, MessageCircle } from "lucide-react";
 import { SITE } from "@/lib/site";
+import PhoneInput, { formatRuPhone, isPhoneComplete } from "./PhoneInput";
 
 export type LeadConfig = {
   /** уникальный идентификатор формы — попадает в заявку как источник */
@@ -45,18 +46,6 @@ const OBJECT_TYPES = [
 
 const TIMES = ["Как можно скорее", "Сегодня до 14:00", "Сегодня после 14:00", "Завтра утром", "Завтра днём"];
 
-function formatPhone(v: string) {
-  const d = v.replace(/\D/g, "").replace(/^8/, "7").replace(/^(?!7)/, "7").slice(0, 11);
-  if (!d) return "";
-  let out = "+7";
-  if (d.length > 1) out += " (" + d.slice(1, 4);
-  if (d.length >= 4) out += ")";
-  if (d.length > 4) out += " " + d.slice(4, 7);
-  if (d.length > 7) out += "-" + d.slice(7, 9);
-  if (d.length > 9) out += "-" + d.slice(9, 11);
-  return out;
-}
-
 export function LeadProvider({ children }: { children: React.ReactNode }) {
   const [cfg, setCfg] = useState<LeadConfig | null>(null);
   const openLead = useCallback((c: LeadConfig) => setCfg(c), []);
@@ -97,8 +86,7 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const digits = phone.replace(/\D/g, "");
-    if (digits.length < 11) {
+    if (!isPhoneComplete(phone)) {
       setErr("Введите номер полностью — мы перезвоним на него");
       return;
     }
@@ -108,7 +96,7 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
       source: cfg.source,
       title: cfg.title,
       name,
-      phone,
+      phone: formatRuPhone(phone),
       object: fields.includes("object") ? object : undefined,
       time: fields.includes("time") ? time : undefined,
       comment: fields.includes("comment") ? comment : undefined,
@@ -133,7 +121,7 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
   };
 
   const waText = encodeURIComponent(
-    `Здравствуйте! Заявка с сайта (${cfg.title}).\nИмя: ${name || "—"}\nТелефон: ${phone || "—"}\nОбъект: ${object}` +
+    `Здравствуйте! Заявка с сайта (${cfg.title}).\nИмя: ${name || "—"}\nТелефон: ${phone ? formatRuPhone(phone) : "—"}\nОбъект: ${object}` +
       (cfg.extra ? "\n" + Object.entries(cfg.extra).map(([k, v]) => `${k}: ${v}`).join("\n") : ""),
   );
 
@@ -221,12 +209,9 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
             {fields.includes("phone") && (
               <label className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Телефон *</span>
-                <input
+                <PhoneInput
                   value={phone}
-                  onChange={(e) => setPhone(formatPhone(e.target.value))}
-                  placeholder="+7 (___) ___-__-__"
-                  inputMode="tel"
-                  autoComplete="tel"
+                  onChange={setPhone}
                   required
                   className="h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 transition font-mono"
                 />
