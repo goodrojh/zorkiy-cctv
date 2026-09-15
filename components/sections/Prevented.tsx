@@ -44,13 +44,14 @@ const KF_DETECT: KF[] = [
 
 /** Ролик 2: реакция и побег */
 const EVENTS_ESCAPE: Ev[] = [
-  { t: 0.0, label: "ЧЕЛОВЕК У ВОРОТ · ПРОЖЕКТОР ВКЛ", tone: "red" },
-  { t: 1.0, label: "СИРЕНА 110 дБ · ГОЛОСОВОЕ ПРЕДУПРЕЖДЕНИЕ", tone: "red" },
-  { t: 2.2, label: "НАРУШИТЕЛЬ ПОКИДАЕТ ТЕРРИТОРИЮ", tone: "amber" },
-  { t: 4.6, label: "ПЕРИМЕТР ЧИСТ · КЛИП ОТПРАВЛЕН ВЛАДЕЛЬЦУ", tone: "green" },
+  { t: 0.0, label: "ДВИЖЕНИЕ · ЗОНА 1 (ДВЕРЬ СКЛАДА)", tone: "amber" },
+  { t: 1.2, label: "ЧЕЛОВЕК · ПОПЫТКА ВСКРЫТИЯ · 96%", tone: "red" },
+  { t: 3.4, label: "ПРОЖЕКТОР ВКЛ · СИРЕНА 110 дБ · PUSH", tone: "red" },
+  { t: 4.6, label: "НАРУШИТЕЛЬ ПОКИДАЕТ ТЕРРИТОРИЮ", tone: "amber" },
+  { t: 7.0, label: "ПЕРИМЕТР ЧИСТ · КЛИП ОТПРАВЛЕН ВЛАДЕЛЬЦУ", tone: "green" },
 ];
 const KF_ESCAPE: KF[] = [
-  [0, 19, 40, 14, 52], [1, 27, 36, 15, 46], [2, 41, 27, 10, 27], [3, 48, 12, 8, 18], [4, 51, 8, 6, 12],
+  [0, 25, 44, 15, 54], [1, 25, 42, 16, 56], [3, 26, 42, 16, 56], [4, 38, 40, 12, 52], [5, 44, 26, 8, 26], [6, 46, 20, 5, 16],
 ];
 
 function toneBorder(t: Tone) {
@@ -85,7 +86,7 @@ function CctvClip({
   poster: string;
   events: Ev[];
   keyframes: KF[];
-  boxLabel: (tone: Tone) => string;
+  boxLabel: (tone: Tone, t: number) => string;
   startClock: number;
   /** секунда, после которой рамку прячем (нарушитель ушёл из кадра) */
   hideBoxAfter?: number;
@@ -141,7 +142,7 @@ function CctvClip({
           style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.4)" }}
         >
           <span className={"absolute -top-5 left-0 font-mono text-[9px] md:text-[10px] px-1.5 py-0.5 text-ink whitespace-nowrap " + toneBg(current.tone)}>
-            {boxLabel(current.tone)}
+            {boxLabel(current.tone, t)}
           </span>
         </motion.div>
       )}
@@ -211,18 +212,18 @@ export default function Prevented() {
             <div>
               <div className="flex items-center gap-2 mb-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/50">
                 <span className="w-5 h-5 rounded-full bg-accent/20 border border-accent/50 text-accent flex items-center justify-center text-[10px] font-bold">2</span>
-                Реакция и побег · склад, Домодедово
+                Вскрытие и побег · склад, Домодедово · 10 секунд
               </div>
               <CctvClip
-                cam="CAM 02 · СКЛАД · ВОРОТА"
+                cam="CAM 02 · СКЛАД · ЗАДНИЙ ДВОР"
                 srcDesktop={media("escape-web.mp4")}
                 srcMobile={media("escape-mobile.mp4")}
                 poster={media("escape.webp")}
                 events={EVENTS_ESCAPE}
                 keyframes={KF_ESCAPE}
-                boxLabel={(tone) => (tone === "green" ? "ПЕРИМЕТР ЧИСТ" : tone === "amber" ? "УХОДИТ" : "ЧЕЛОВЕК 96%")}
+                boxLabel={(_tone, tt) => (tt < 1.2 ? "ДВИЖЕНИЕ" : tt < 3.4 ? "ЧЕЛОВЕК 96%" : tt < 4.6 ? "ТРЕВОГА" : "УХОДИТ")}
                 startClock={0}
-                hideBoxAfter={4.4}
+                hideBoxAfter={6.6}
                 delay={0.15}
               />
             </div>
