@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import type { Variants } from "framer-motion";
 import { MapPin, FileCheck2, Wrench, Smartphone, CheckCircle2 } from "lucide-react";
 import { media } from "@/lib/site";
@@ -77,7 +77,7 @@ export default function HowItWorks() {
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: "0px 0px -40px 0px" }}
         className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-8 mb-14 max-w-7xl mx-auto relative z-10"
       >
         {STEPS.map((s) => (
@@ -130,7 +130,7 @@ export default function HowItWorks() {
               fields: ["name", "phone", "object", "time"],
             })
           }
-          className="w-full sm:w-auto rounded-full px-10 py-4 text-sm font-bold tracking-widest uppercase bg-accent text-ink shadow-xl shadow-accent/20 hover:shadow-2xl transition-all"
+          className="w-full sm:w-auto rounded-full px-10 py-4 text-sm font-bold tracking-widest uppercase bg-accent text-ink shadow-xl shadow-accent/20 hover:shadow-2xl transition-shadow"
         >
           Записаться на выезд
         </motion.button>
@@ -138,7 +138,7 @@ export default function HowItWorks() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}
           onClick={openQuiz}
-          className="w-full sm:w-auto rounded-full px-10 py-4 text-sm font-bold tracking-widest uppercase bg-white text-night border border-gray-200 shadow-lg hover:shadow-xl transition-all"
+          className="w-full sm:w-auto rounded-full px-10 py-4 text-sm font-bold tracking-widest uppercase bg-white text-night border border-gray-200 shadow-lg hover:shadow-xl transition-shadow"
         >
           Сначала посчитать
         </motion.button>

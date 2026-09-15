@@ -40,7 +40,7 @@ export default function Nav() {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="fixed top-0 inset-x-0 z-50 px-4 md:px-8 pt-4 md:pt-6 pointer-events-none"
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between p-[8px] pl-4 rounded-full bg-ink/40 backdrop-blur-xl border border-white/10 pointer-events-auto">
+      <div className="max-w-7xl mx-auto flex items-center justify-between p-[8px] pl-4 rounded-full bg-ink/85 md:bg-ink/40 backdrop-blur-xl border border-white/10 pointer-events-auto">
         <Logo />
 
         <div className="hidden lg:flex items-center gap-7">

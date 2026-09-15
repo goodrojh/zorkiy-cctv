@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import { BadgeCheck, FileSignature, Wallet, ShieldCheck } from "lucide-react";
 
 const ITEMS = [

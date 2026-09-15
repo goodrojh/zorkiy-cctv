@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import { Check } from "lucide-react";
 import { media } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";
@@ -81,7 +81,7 @@ export default function Pricing() {
           <div className="absolute inset-0 bg-ink/50" />
         </div>
 
-        <div className="relative z-10 bg-white/85 backdrop-blur-xl m-3 md:m-[40px] rounded-[16px] overflow-hidden border border-white/40">
+        <div className="relative z-10 bg-white/95 md:bg-white/85 backdrop-blur-xl m-3 md:m-[40px] rounded-[16px] overflow-hidden border border-white/40">
           <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-black/10">
             {plans.map((plan, idx) => (
               <motion.div

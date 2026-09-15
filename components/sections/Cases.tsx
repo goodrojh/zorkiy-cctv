@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import { MapPin, Camera, Clock } from "lucide-react";
 import { media } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import { Check, X, HelpCircle } from "lucide-react";
 import { useLead } from "@/components/ui/LeadProvider";
 
@@ -36,7 +36,7 @@ export default function Compare() {
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: "0px 0px -40px 0px" }}
           transition={{ duration: 0.7 }}
           className="rounded-[24px] overflow-hidden border border-white/10 glass"
         >

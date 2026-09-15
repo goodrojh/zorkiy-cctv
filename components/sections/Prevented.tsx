@@ -1,28 +1,33 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useInView, useMotionValue, useSpring, animate } from "framer-motion";
+import { motion as fm, useInView } from "framer-motion";
+import { motion } from "@/lib/motion";
 import { Siren, ShieldAlert, Clock3, Database, ArrowRight, Lightbulb } from "lucide-react";
 import { STATS, media } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";
 import AutoVideo from "@/components/ui/AutoVideo";
 
-function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
+function Counter({ value }: { value: number }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "0px 0px -40px 0px" });
-  const mv = useMotionValue(0);
-  const spring = useSpring(mv, { stiffness: 60, damping: 20 });
-  const [txt, setTxt] = useState("0");
+  const inView = useInView(ref, { once: true, margin: "0px 0px -20px 0px" });
   useEffect(() => {
-    if (inView) animate(mv, value, { duration: 2.2, ease: "easeOut" });
-  }, [inView, value, mv]);
-  useEffect(() => spring.on("change", (v) => setTxt(Math.round(v).toLocaleString("ru-RU"))), [spring]);
-  return (
-    <span ref={ref}>
-      {txt}
-      {suffix}
-    </span>
-  );
+    const el = ref.current;
+    if (!inView || !el) return;
+    // Считаем через requestAnimationFrame и пишем прямо в DOM — без ре-рендеров React на каждом кадре
+    const start = performance.now();
+    const dur = 1600;
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(value * e).toLocaleString("ru-RU");
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, value]);
+  return <span ref={ref}>0</span>;
 }
 
 type Tone = "amber" | "red" | "green";
@@ -120,7 +125,7 @@ function CctvClip({
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+      viewport={{ once: true, margin: "0px" }}
       transition={{ duration: 0.7, delay }}
       className="relative rounded-[20px] md:rounded-[24px] overflow-hidden border border-white/10 bg-black aspect-video shadow-2xl shadow-black/60"
     >
@@ -135,7 +140,7 @@ function CctvClip({
       <div className="absolute top-3 right-3 md:top-4 md:right-4 font-mono text-[10px] md:text-xs text-white/60 tracking-wider">{clock}</div>
 
       {!hideBox && (
-        <motion.div
+        <fm.div
           animate={{ left: box.x + "%", top: box.y + "%", width: box.w + "%", height: box.h + "%" }}
           transition={t < 0.35 ? { duration: 0 } : { type: "spring", stiffness: 60, damping: 18 }}
           className={"absolute border-2 " + toneBorder(current.tone)}
@@ -144,14 +149,14 @@ function CctvClip({
           <span className={"absolute -top-5 left-0 font-mono text-[9px] md:text-[10px] px-1.5 py-0.5 text-ink whitespace-nowrap " + toneBg(current.tone)}>
             {boxLabel(current.tone, t)}
           </span>
-        </motion.div>
+        </fm.div>
       )}
 
       <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 flex flex-col gap-1 font-mono text-[10px] md:text-[11px]">
         {active.slice(-3).map((e) => (
-          <motion.div key={e.label} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} className={"self-start px-2 py-1 rounded backdrop-blur-md border " + toneChip(e.tone)}>
+          <fm.div key={e.label} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} className={"self-start px-2 py-1 rounded md:backdrop-blur-md border " + toneChip(e.tone)}>
             {e.label}
-          </motion.div>
+          </fm.div>
         ))}
       </div>
     </motion.div>
@@ -240,7 +245,7 @@ export default function Prevented() {
               ].map((s) => (
                 <motion.div key={s.l} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass rounded-2xl p-4 md:p-5">
                   <s.icon className={"w-5 h-5 mb-2 " + s.tone} />
-                  <div className="font-display font-bold text-3xl md:text-4xl leading-none">
+                  <div className="font-display font-bold text-3xl md:text-4xl leading-none tabular-nums">
                     <Counter value={s.v} />
                   </div>
                   <div className="mt-1.5 text-[12px] md:text-[13px] text-white/60 leading-snug">{s.l}</div>

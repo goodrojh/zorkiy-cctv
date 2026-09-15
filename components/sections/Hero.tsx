@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import { Phone, Calculator, Star, ShieldCheck, Clock } from "lucide-react";
 import { SITE, STATS, media } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import { Check, AlertTriangle } from "lucide-react";
 import { useLead } from "@/components/ui/LeadProvider";
 
@@ -36,7 +36,9 @@ export default function Checklist() {
         <div>
           <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-accent-dark">Самодиагностика</span>
           <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-[44px] text-night leading-[1.1] mt-3 mb-6">
-            Нужно ли вам видеонаблюдение? 7 признаков
+            Нужно ли вам видеонаблюдение?
+            <br />
+            <span className="whitespace-nowrap text-accent-dark">7 признаков</span>
           </h2>
           <div className="flex flex-col gap-2.5">
             {ITEMS.map((it, i) => {

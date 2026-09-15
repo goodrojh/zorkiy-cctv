@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import { Home, Building2, Briefcase, Store, Warehouse, HardHat, Fence, Car, UtensilsCrossed, School, ArrowUpRight } from "lucide-react";
 import { useLead } from "@/components/ui/LeadProvider";
 

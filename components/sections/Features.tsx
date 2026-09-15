@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/motion";
 import type { Variants } from "framer-motion";
 import { Moon, Smartphone, Bell, Cloud, Check, Cpu, Siren, ShieldCheck, Eye } from "lucide-react";
 import { media } from "@/lib/site";
@@ -45,7 +45,7 @@ export default function Features() {
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: "0px 0px -40px 0px" }}
         className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 max-w-7xl mx-auto relative z-10"
       >
         {/* Card 1 — night vision, image bg */}
