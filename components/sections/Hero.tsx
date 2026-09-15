@@ -1,38 +1,29 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Phone, Calculator, Star, ShieldCheck, Clock } from "lucide-react";
 import { SITE, STATS, media } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";
 import { useQuiz } from "@/components/ui/QuizModal";
+import AutoVideo from "@/components/ui/AutoVideo";
 
 const BRANDS = ["Hikvision", "Dahua", "HiWatch", "TRASSIR", "Uniview", "Axis", "Tantos", "RVi"];
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const { openLead } = useLead();
   const { openQuiz } = useQuiz();
-
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.playbackRate = 0.85;
-  }, []);
 
   return (
     <section id="top" className="min-h-[100svh] md:min-h-[104vh] flex flex-col bg-ink relative w-full overflow-hidden">
       {/* Video Background */}
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
+      <AutoVideo
+        srcDesktop={media("hero-web.mp4")}
+        srcMobile={media("hero-mobile.mp4")}
         poster={media("hero-house.webp")}
+        playbackRate={0.85}
         className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src={media("hero-web.mp4")} type="video/mp4" media="(min-width: 768px)" />
-        <source src={media("hero-mobile.mp4")} type="video/mp4" />
-      </video>
+      />
       <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/30 to-ink z-[1]" />
       <div className="absolute inset-0 scanlines z-[1] opacity-60" />
 

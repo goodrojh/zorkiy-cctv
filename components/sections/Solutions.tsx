@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Home, Building2, Briefcase, Store, Warehouse, HardHat, Fence, Car, UtensilsCrossed, School, ArrowUpRight } from "lucide-react";
 import { useLead } from "@/components/ui/LeadProvider";
@@ -22,30 +22,8 @@ const SOLUTIONS: Sol[] = [
 
 export default function Solutions() {
   const { openLead } = useLead();
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [hovered, setHovered] = useState(false);
-  const pos = useRef(0);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    let raf: number;
-    const tick = () => {
-      if (!hovered && window.innerWidth >= 768) {
-        pos.current += 0.5;
-        if (pos.current >= el.scrollWidth / 2) pos.current = 0;
-        el.scrollLeft = pos.current;
-      } else pos.current = el.scrollLeft;
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [hovered]);
-
-  const list = [...SOLUTIONS, ...SOLUTIONS];
-
   return (
-    <section id="solutions" className="bg-white py-20 px-0 md:px-6 overflow-hidden">
+    <section id="solutions" className="bg-white py-20 px-0 md:px-6">
       <div className="max-w-[1300px] mx-auto px-5 md:px-0">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 md:mb-10">
           <div className="flex-1">
@@ -71,54 +49,48 @@ export default function Solutions() {
         </div>
       </div>
 
-      <div className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-10 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-10 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-        <div
-          ref={scrollRef}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          onTouchStart={() => setHovered(true)}
-          className="flex flex-row gap-4 overflow-x-auto pb-4 px-5 md:px-0 no-scrollbar cursor-grab active:cursor-grabbing"
-        >
-          {list.map((s, i) => (
-            <motion.button
-              key={s.id + i}
-              whileHover={{ y: -4 }}
-              onClick={() =>
-                openLead({
-                  source: "solution-" + s.id,
-                  title: `${s.name}: смета от ${s.from} ₽`,
-                  subtitle: `Типовая конфигурация — ${s.cams}. Инженер бесплатно уточнит на месте и зафиксирует цену в смете.`,
-                  cta: "Получить смету",
-                  fields: ["name", "phone", "comment"],
-                  extra: { Решение: s.name },
-                })
-              }
-              className="min-w-[250px] md:min-w-[280px] text-left bg-[#F6F8F7] border border-[#E6EAE8] rounded-[18px] p-6 md:p-7 flex flex-col gap-3 transition-all duration-200 hover:bg-white hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] relative"
-            >
-              {s.hot && (
-                <span className="absolute top-4 right-4 text-[10px] font-bold tracking-wider uppercase bg-alert text-white px-2 py-0.5 rounded-full">
-                  Хит
-                </span>
-              )}
-              <div className="w-11 h-11 rounded-xl bg-night flex items-center justify-center">
-                <s.icon className="w-5 h-5 text-accent" />
-              </div>
-              <h3 className="font-display font-bold text-[18px] text-night">{s.name}</h3>
-              <div className="flex items-baseline gap-2">
-                <span className="font-bold text-night text-[15px]">
-                  {s.from === "по проекту" ? "по проекту" : "от " + s.from + " ₽"}
-                </span>
-                <span className="text-[12px] text-gray-400">· {s.cams}</span>
-              </div>
-              <p className="text-[13px] text-gray-500 leading-[1.5]">{s.desc}</p>
-              <span className="mt-auto text-[13px] font-semibold text-night flex items-center gap-1">
-                Получить смету <ArrowUpRight className="w-3.5 h-3.5" />
+      <div className="max-w-[1300px] mx-auto px-5 md:px-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {SOLUTIONS.map((s, i) => (
+          <motion.button
+            key={s.id}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px -40px 0px" }}
+            transition={{ delay: (i % 5) * 0.06 }}
+            whileHover={{ y: -4 }}
+            onClick={() =>
+              openLead({
+                source: "solution-" + s.id,
+                title: `${s.name}: смета от ${s.from} ₽`,
+                subtitle: `Типовая конфигурация — ${s.cams}. Инженер бесплатно уточнит на месте и зафиксирует цену в смете.`,
+                cta: "Получить смету",
+                fields: ["name", "phone", "comment"],
+                extra: { Решение: s.name },
+              })
+            }
+            className="text-left bg-[#F6F8F7] border border-[#E6EAE8] rounded-[18px] p-5 md:p-6 flex flex-col gap-3 transition-all duration-200 hover:bg-white hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] relative min-h-[220px]"
+          >
+            {s.hot && (
+              <span className="absolute top-4 right-4 text-[10px] font-bold tracking-wider uppercase bg-alert text-white px-2 py-0.5 rounded-full">
+                Хит
               </span>
-            </motion.button>
-          ))}
-        </div>
+            )}
+            <div className="w-11 h-11 rounded-xl bg-night flex items-center justify-center">
+              <s.icon className="w-5 h-5 text-accent" />
+            </div>
+            <h3 className="font-display font-bold text-[18px] text-night leading-tight">{s.name}</h3>
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className="font-bold text-night text-[15px]">
+                {s.from === "по проекту" ? "по проекту" : "от " + s.from + " ₽"}
+              </span>
+              <span className="text-[12px] text-gray-400">· {s.cams}</span>
+            </div>
+            <p className="text-[13px] text-gray-500 leading-[1.5]">{s.desc}</p>
+            <span className="mt-auto pt-1 text-[13px] font-semibold text-night flex items-center gap-1">
+              Получить смету <ArrowUpRight className="w-3.5 h-3.5" />
+            </span>
+          </motion.button>
+        ))}
       </div>
     </section>
   );

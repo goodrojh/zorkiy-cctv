@@ -48,9 +48,6 @@ export default function Reviews() {
             <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-[44px] text-night leading-[1.1] mt-3">
               Нас рекомендуют соседям. Это лучшая реклама.
             </h2>
-            <p className="text-gray-500 mt-4 leading-relaxed">
-              Отзывы собраны с независимых площадок — их нельзя удалить или отредактировать. Кликните, чтобы проверить.
-            </p>
             <div className="mt-6 grid grid-cols-2 gap-3">
               {PLATFORMS.map((p) => (
                 <div key={p.name} className="rounded-2xl border border-gray-200 p-4 hover:border-accent transition-colors">
