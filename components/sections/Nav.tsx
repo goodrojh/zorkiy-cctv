@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Menu, X } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";
+import { MESSENGERS } from "@/components/ui/Messengers";
+import { reachGoal } from "@/lib/lead";
 
 const LINKS = [
   { label: "Решения", href: "#solutions" },
@@ -41,7 +43,30 @@ export default function Nav() {
       className="fixed top-0 inset-x-0 z-50 px-4 md:px-8 pt-4 md:pt-6 pointer-events-none"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between p-[8px] pl-4 rounded-full bg-ink/85 md:bg-ink/40 backdrop-blur-xl border border-white/10 pointer-events-auto">
-        <Logo />
+        <div className="flex items-center gap-3">
+          <Logo />
+          {/* мессенджеры — сразу у логотипа, чтобы написать можно было с первого экрана */}
+          <div className="hidden md:flex items-center gap-1.5 pl-3 border-l border-white/15">
+            {MESSENGERS.map((m) => (
+              <a
+                key={m.id}
+                href={m.href}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => reachGoal("click_" + m.id)}
+                aria-label={m.label}
+                title={m.label}
+                style={m.raster ? undefined : { background: m.bg, color: m.fg }}
+                className={
+                  "w-8 h-8 flex items-center justify-center transition hover:scale-110 active:scale-95 " +
+                  (m.raster ? "" : "rounded-full")
+                }
+              >
+                <m.Icon className={m.raster ? "w-8 h-8" : "w-[17px] h-[17px]"} />
+              </a>
+            ))}
+          </div>
+        </div>
 
         <div className="hidden lg:flex items-center gap-7">
           {LINKS.map((l) => (

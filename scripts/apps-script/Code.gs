@@ -2,42 +2,63 @@
  * ЗОРКИЙ — приём заявок с сайта.
  * Пишет каждую заявку строкой в Google-таблицу и дублирует письмом на почту компании.
  *
- * УСТАНОВКА (5 минут, делается один раз):
- *  1. Создайте Google-таблицу, назовите лист «Заявки».
- *  2. В таблице: Расширения → Apps Script. Удалите пример, вставьте этот файл целиком.
- *  3. Впишите свою почту в NOTIFY_EMAIL ниже (уже стоит info@vidzhio.ru).
- *  4. Развернуть → Новое развёртывание → тип «Веб-приложение»:
- *       «Запуск от имени» — От моего имени;
- *       «У кого есть доступ» — У всех.
- *     Нажмите «Развернуть», разрешите доступ, скопируйте URL вида
- *     https://script.google.com/macros/s/AKfy.../exec
- *  5. Передайте этот URL разработчику (переменная NEXT_PUBLIC_LEAD_WEBHOOK) — и заявки пойдут.
+ * ОБНОВЛЕНИЕ (версия 2): добавлены лог отправки писем и диагностика,
+ * письмо уходит в двух форматах (текст + HTML) — так оно реже попадает в спам.
  *
- * ВАЖНО: после любой правки кода нужно выпустить НОВУЮ версию развёртывания,
- * иначе сайт продолжит обращаться к старой.
+ * УСТАНОВКА / ОБНОВЛЕНИЕ:
+ *  1. В таблице: Расширения → Apps Script.
+ *  2. Выделите весь старый код и замените этим файлом целиком. Сохраните (Ctrl+S).
+ *  3. ОБЯЗАТЕЛЬНО: Развернуть → Управление развёртываниями → карандаш (изменить)
+ *     → Версия: «Новая версия» → Развернуть.
+ *     Без этого шага сайт продолжит работать со старым кодом.
+ *  4. URL развёртывания менять не нужно — он остаётся прежним.
  */
 
 var SHEET_NAME = "Заявки";
+var LOG_SHEET = "Лог";
 var NOTIFY_EMAIL = "info@vidzhio.ru";
 var COMPANY = "ЗОРКИЙ";
+var DIAG_TOKEN = "mOGWYui9PIQh"; // для проверки состояния: ?diag=mOGWYui9PIQh
 
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
     saveToSheet_(data);
-    notify_(data);
-    return json_({ ok: true });
+    var mail = notify_(data);
+    log_("заявка принята", mail);
+    return json_({ ok: true, mail: mail });
   } catch (err) {
-    // Пишем ошибку в таблицу-лог, чтобы заявка не потерялась молча
     try {
-      logError_(err, e && e.postData ? e.postData.contents : "");
+      log_("ОШИБКА: " + err, e && e.postData ? String(e.postData.contents).slice(0, 500) : "");
     } catch (ignored) {}
     return json_({ ok: false, error: String(err) });
   }
 }
 
-function doGet() {
-  return json_({ ok: true, service: COMPANY + " lead endpoint" });
+/** Диагностика: откройте URL развёртывания с ?diag=<токен> */
+function doGet(e) {
+  var token = e && e.parameter ? e.parameter.diag : "";
+  if (token !== DIAG_TOKEN) return json_({ ok: true, service: COMPANY + " lead endpoint" });
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME);
+  var logSheet = ss.getSheetByName(LOG_SHEET);
+  var lastLogs = [];
+  if (logSheet && logSheet.getLastRow() > 1) {
+    var from = Math.max(2, logSheet.getLastRow() - 4);
+    lastLogs = logSheet.getRange(from, 1, logSheet.getLastRow() - from + 1, 3).getValues();
+  }
+  return json_({
+    ok: true,
+    таблица: ss.getName(),
+    ссылка: ss.getUrl(),
+    лист_заявок: sheet ? SHEET_NAME : "НЕ НАЙДЕН",
+    строк_в_заявках: sheet ? Math.max(0, sheet.getLastRow() - 1) : 0,
+    почта_уведомлений: NOTIFY_EMAIL,
+    аккаунт_скрипта: Session.getEffectiveUser().getEmail(),
+    остаток_писем_на_сегодня: MailApp.getRemainingDailyQuota(),
+    последние_события: lastLogs,
+  });
 }
 
 /** Добавляет строку; если в заявке появились новые поля — добавляет колонки автоматически */
@@ -71,10 +92,23 @@ function saveToSheet_(data) {
   sheet.autoResizeColumns(1, Math.min(headers.length, 12));
 }
 
-/** Письмо с заявкой на почту компании */
+/** Письмо с заявкой. Возвращает краткий статус для лога и ответа сайту. */
 function notify_(data) {
-  var subject =
-    "Заявка с сайта " + COMPANY + ": " + (data["Имя"] || "без имени") + " — " + (data["Телефон"] || "");
+  var quotaBefore = MailApp.getRemainingDailyQuota();
+  if (quotaBefore < 1) return "НЕ ОТПРАВЛЕНО: исчерпана дневная квота писем";
+
+  var name = data["Имя"] || "без имени";
+  var phone = data["Телефон"] || "";
+  var subject = "Заявка с сайта: " + name + " " + phone;
+
+  var plain = Object.keys(data)
+    .filter(function (k) {
+      return k !== "ts" && data[k] !== "" && data[k] !== null && data[k] !== undefined;
+    })
+    .map(function (k) {
+      return k + ": " + data[k];
+    })
+    .join("\n");
 
   var rows = Object.keys(data)
     .filter(function (k) {
@@ -91,14 +125,14 @@ function notify_(data) {
     })
     .join("");
 
-  var phone = String(data["Телефон"] || "").replace(/\D/g, "");
-  var buttons = phone
+  var digits = String(phone).replace(/\D/g, "");
+  var buttons = digits
     ? '<p style="margin:18px 0 0"><a href="tel:+' +
-      phone +
+      digits +
       '" style="background:#00D68F;color:#080B12;padding:10px 18px;border-radius:999px;text-decoration:none;font-weight:700;display:inline-block">Позвонить</a>&nbsp;&nbsp;' +
       '<a href="https://wa.me/' +
-      phone +
-      '" style="background:#25D366;color:#08140C;padding:10px 18px;border-radius:999px;text-decoration:none;font-weight:700;display:inline-block">WhatsApp</a></p>'
+      digits +
+      '" style="background:#25D366;color:#ffffff;padding:10px 18px;border-radius:999px;text-decoration:none;font-weight:700;display:inline-block">WhatsApp</a></p>'
     : "";
 
   var html =
@@ -113,13 +147,31 @@ function notify_(data) {
     buttons +
     "</div>";
 
-  MailApp.sendEmail({ to: NOTIFY_EMAIL, subject: subject, htmlBody: html, name: COMPANY + " · сайт" });
+  try {
+    MailApp.sendEmail({
+      to: NOTIFY_EMAIL,
+      subject: subject,
+      body: "Новая заявка с сайта " + COMPANY + "\n\n" + plain,
+      htmlBody: html,
+      name: COMPANY + " · сайт",
+      replyTo: NOTIFY_EMAIL,
+    });
+    return "отправлено на " + NOTIFY_EMAIL + " (остаток квоты " + (quotaBefore - 1) + ")";
+  } catch (err) {
+    return "ОШИБКА ОТПРАВКИ: " + err;
+  }
 }
 
-function logError_(err, raw) {
+function log_(event, details) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("Ошибки") || ss.insertSheet("Ошибки");
-  sheet.appendRow([formatDate_(new Date()), String(err), String(raw).slice(0, 4000)]);
+  var sheet = ss.getSheetByName(LOG_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(LOG_SHEET);
+    sheet.appendRow(["Дата и время", "Событие", "Детали"]);
+    sheet.getRange(1, 1, 1, 3).setFontWeight("bold");
+    sheet.setFrozenRows(1);
+  }
+  sheet.appendRow([formatDate_(new Date()), String(event), String(details).slice(0, 2000)]);
 }
 
 function formatDate_(d) {
@@ -134,7 +186,7 @@ function json_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
-/** Запустите вручную один раз, чтобы проверить таблицу и письмо */
+/** Запустите вручную, чтобы проверить таблицу и письмо. Результат — во всплывающем логе (Ctrl+Enter). */
 function testLead() {
   var demo = {
     Форма: "test",
@@ -145,5 +197,8 @@ function testLead() {
     Согласие: "да, " + formatDate_(new Date()),
   };
   saveToSheet_(demo);
-  notify_(demo);
+  var res = notify_(demo);
+  log_("ручной тест", res);
+  Logger.log("Почта: " + NOTIFY_EMAIL + " | Результат: " + res);
+  Logger.log("Остаток писем на сегодня: " + MailApp.getRemainingDailyQuota());
 }
