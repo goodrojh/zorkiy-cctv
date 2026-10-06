@@ -81,6 +81,7 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
   const [time, setTime] = useState(TIMES[0]);
   const [comment, setComment] = useState("");
   const [agree, setAgree] = useState(false);
+  const [trap, setTrap] = useState(""); // honeypot: люди это поле не видят
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [err, setErr] = useState("");
 
@@ -99,6 +100,11 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
     }
     setErr("");
     setState("sending");
+    if (trap) {
+      // бот заполнил скрытое поле — показываем успех, но ничего не отправляем
+      setState("done");
+      return;
+    }
     try {
       await sendLead({
         Форма: cfg.source,
@@ -256,6 +262,17 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
                 />
               </label>
             )}
+
+            <input
+              type="text"
+              name="company_site"
+              tabIndex={-1}
+              autoComplete="off"
+              value={trap}
+              onChange={(e) => setTrap(e.target.value)}
+              aria-hidden="true"
+              style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+            />
 
             <label className="flex items-start gap-2.5 cursor-pointer select-none">
               <input
