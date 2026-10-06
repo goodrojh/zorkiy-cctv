@@ -1,5 +1,5 @@
 /**
- * ЗОРКИЙ — приём заявок с сайта.
+ * ВИДЖИО — приём заявок с сайта.
  * Пишет каждую заявку строкой в Google-таблицу и дублирует письмом на почту компании.
  *
  * ОБНОВЛЕНИЕ (версия 2): добавлены лог отправки писем и диагностика,
@@ -17,7 +17,7 @@
 var SHEET_NAME = "Заявки";
 var LOG_SHEET = "Лог";
 var NOTIFY_EMAIL = "info@vidzhio.ru";
-var COMPANY = "ЗОРКИЙ";
+var COMPANY = "ВИДЖИО";
 var DIAG_TOKEN = "mOGWYui9PIQh"; // для проверки состояния: ?diag=mOGWYui9PIQh
 
 function doPost(e) {

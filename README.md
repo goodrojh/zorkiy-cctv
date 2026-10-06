@@ -1,4 +1,4 @@
-# ЗОРКИЙ — сайт компании по установке видеонаблюдения (Москва и МО)
+# ВИДЖИО — сайт компании по установке видеонаблюдения (Москва и МО)
 
 Next.js 15 (App Router, static export) + Tailwind CSS + framer-motion + lucide-react.
 

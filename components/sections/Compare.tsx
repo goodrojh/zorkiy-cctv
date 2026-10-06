@@ -42,7 +42,7 @@ export default function Compare() {
         >
           <div className="grid grid-cols-[1.1fr_1.3fr_1.1fr] md:grid-cols-[1fr_1.4fr_1.2fr] bg-white/5 text-[11px] md:text-sm font-bold">
             <div className="p-3 md:p-5 text-white/50">Критерий</div>
-            <div className="p-3 md:p-5 bg-accent/15 text-accent font-display tracking-wider text-[13px] md:text-base">ЗОРКИЙ</div>
+            <div className="p-3 md:p-5 bg-accent/15 text-accent font-display tracking-wider text-[13px] md:text-base">ВИДЖИО</div>
             <div className="p-3 md:p-5 text-white/50">Обычный сервис</div>
           </div>
           {ROWS.map((r, i) => (

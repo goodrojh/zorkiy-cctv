@@ -160,7 +160,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="mt-6 pt-5 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-3 text-[12px] text-white/40">
-            <span>© {new Date().getFullYear()} ЗОРКИЙ. Видеонаблюдение под ключ в Москве и МО.</span>
+            <span>© {new Date().getFullYear()} ВИДЖИО. Видеонаблюдение под ключ в Москве и МО.</span>
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
               <a href={base("/privacy/")} className="hover:text-white">Политика обработки персональных данных</a>
               <a href={base("/consent/")} className="hover:text-white">Согласие на обработку</a>

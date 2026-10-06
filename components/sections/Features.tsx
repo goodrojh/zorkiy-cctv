@@ -111,7 +111,7 @@ export default function Features() {
               </div>
               <div className="min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[12px] font-bold text-night">ЗОРКИЙ · Двор</span>
+                  <span className="text-[12px] font-bold text-night">ВИДЖИО · Двор</span>
                   <span className="text-[10px] text-gray-400 font-mono">сейчас</span>
                 </div>
                 <p className="text-[12px] text-gray-600 leading-snug">Обнаружен человек у ворот. Нажмите, чтобы смотреть live и включить сирену.</p>

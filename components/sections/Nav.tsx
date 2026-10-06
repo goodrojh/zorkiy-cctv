@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Menu, X } from "lucide-react";
-import { SITE } from "@/lib/site";
+import { SITE, media } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";
 import { MESSENGERS } from "@/components/ui/Messengers";
 import { reachGoal } from "@/lib/lead";
@@ -16,17 +16,11 @@ const LINKS = [
   { label: "Вопросы", href: "#faq" },
 ];
 
-export function Logo({ light = true }: { light?: boolean }) {
+export function Logo() {
   return (
-    <a href="#top" className="flex items-center gap-2.5 select-none">
-      <span className="relative w-8 h-8 rounded-lg bg-accent flex items-center justify-center overflow-hidden">
-        <span className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent" />
-        <span className="w-3.5 h-3.5 rounded-full border-[3px] border-ink" />
-        <span className="absolute w-1 h-1 rounded-full bg-ink" />
-      </span>
-      <span className={"font-display font-bold text-[20px] tracking-[0.12em] " + (light ? "text-white" : "text-night")}>
-        ЗОРКИЙ
-      </span>
+    <a href="#top" className="flex items-center select-none" aria-label={SITE.brand}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={media("logo-vidzhio.svg")} alt={SITE.brand} className="h-[26px] md:h-[30px] w-auto" />
     </a>
   );
 }

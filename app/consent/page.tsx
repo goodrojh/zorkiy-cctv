@@ -3,7 +3,7 @@ import LegalShell from "@/components/ui/LegalShell";
 import { SITE, base } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Согласие на обработку персональных данных — ЗОРКИЙ",
+  title: "Согласие на обработку персональных данных — ВИДЖИО",
   description: "Текст согласия на обработку персональных данных, которое пользователь даёт при отправке заявки на сайте.",
   robots: { index: true, follow: true },
 };

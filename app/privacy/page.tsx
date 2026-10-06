@@ -3,8 +3,8 @@ import LegalShell from "@/components/ui/LegalShell";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Политика обработки персональных данных — ЗОРКИЙ",
-  description: "Как ЗОРКИЙ обрабатывает персональные данные пользователей сайта: цели, состав данных, сроки, права субъекта.",
+  title: "Политика обработки персональных данных — ВИДЖИО",
+  description: "Как ВИДЖИО обрабатывает персональные данные пользователей сайта: цели, состав данных, сроки, права субъекта.",
   robots: { index: true, follow: true },
 };
 

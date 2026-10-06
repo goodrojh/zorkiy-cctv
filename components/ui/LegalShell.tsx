@@ -1,17 +1,14 @@
 import React from "react";
-import { SITE, base, LEGAL_UPDATED } from "@/lib/site";
+import { SITE, base, media, LEGAL_UPDATED } from "@/lib/site";
 
 export default function LegalShell({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <main className="min-h-screen bg-white">
       <header className="bg-ink text-white px-5 md:px-10 pt-8 pb-10">
         <div className="max-w-3xl mx-auto">
-          <a href={base("/")} className="inline-flex items-center gap-2.5 select-none">
-            <span className="relative w-8 h-8 rounded-lg bg-accent flex items-center justify-center overflow-hidden">
-              <span className="w-3.5 h-3.5 rounded-full border-[3px] border-ink" />
-              <span className="absolute w-1 h-1 rounded-full bg-ink" />
-            </span>
-            <span className="font-display font-bold text-[20px] tracking-[0.12em] text-white">ЗОРКИЙ</span>
+          <a href={base("/")} className="inline-flex items-center select-none" aria-label={SITE.brand}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={media("logo-vidzhio.svg")} alt={SITE.brand} className="h-[30px] w-auto" />
           </a>
           <h1 className="font-display font-bold text-2xl sm:text-3xl md:text-[40px] leading-[1.15] mt-7">{title}</h1>
           <p className="mt-3 text-white/50 text-sm">
