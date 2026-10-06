@@ -1,56 +1,62 @@
 "use client";
 
 import React from "react";
-import { SITE } from "@/lib/site";
+import { SITE, media } from "@/lib/site";
+import { reachGoal } from "@/lib/lead";
 
+/** Официальный знак WhatsApp (brand glyph) */
 export function WhatsAppIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.09 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.8h-.02a9.8 9.8 0 0 1-4.99-1.37l-.36-.21-3.71.97.99-3.62-.23-.37a9.78 9.78 0 0 1-1.5-5.22c0-5.4 4.4-9.8 9.82-9.8 2.62 0 5.08 1.03 6.93 2.88a9.74 9.74 0 0 1 2.87 6.93c0 5.4-4.4 9.81-9.8 9.81M20.52 3.45A11.7 11.7 0 0 0 12.05 0C5.56 0 .28 5.28.28 11.76c0 2.07.54 4.1 1.57 5.88L.18 24l6.5-1.7a11.73 11.73 0 0 0 5.37 1.36h.01c6.48 0 11.76-5.28 11.76-11.76 0-3.14-1.22-6.1-3.44-8.32" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} role="img" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
     </svg>
   );
 }
 
+/** Официальный знак Telegram (brand glyph) */
 export function TelegramIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path d="M11.99 0C5.37 0 0 5.37 0 12s5.37 12 11.99 12C18.62 24 24 18.63 24 12S18.62 0 11.99 0m5.56 8.22-1.86 8.76c-.14.62-.51.78-1.03.48l-2.85-2.1-1.37 1.32c-.15.15-.28.28-.58.28l.21-2.92 5.32-4.8c.23-.21-.05-.32-.36-.12L8.46 12.3l-2.83-.89c-.62-.19-.63-.62.13-.92l11.04-4.26c.51-.19.96.12.75.99" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} role="img" aria-hidden="true">
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
     </svg>
   );
 }
 
-/** Логотип МАКС — упрощённый знак «M» в скруглённом квадрате */
+/** Логотип МАКС — официальный знак (растровый, т.к. оригинал градиентный) */
 export function MaxIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M4 18V7.2c0-.9 1.1-1.3 1.7-.6L12 13.2l6.3-6.6c.6-.7 1.7-.3 1.7.6V18"
-        stroke="currentColor"
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={media("max-logo.webp")} alt="" aria-hidden="true" className={className + " rounded-[22%]"} />
   );
 }
 
-export const MESSENGERS = [
-  { id: "whatsapp", label: "WhatsApp", href: SITE.whatsapp, Icon: WhatsAppIcon, bg: "#25D366", fg: "#08140C" },
-  { id: "telegram", label: "Telegram", href: SITE.telegram, Icon: TelegramIcon, bg: "#2AABEE", fg: "#04202E" },
-  { id: "max", label: "МАКС", href: SITE.max, Icon: MaxIcon, bg: "#7C5CFF", fg: "#120A2E" },
-] as const;
+export type Messenger = {
+  id: "whatsapp" | "telegram" | "max";
+  label: string;
+  href: string;
+  /** цвет плашки; у МАКС фон задаёт сам логотип */
+  bg: string;
+  fg: string;
+  Icon: ({ className }: { className?: string }) => React.JSX.Element;
+  /** логотип сам по себе цветной — не красим его в цвет текста */
+  raster?: boolean;
+};
 
-/** Ряд кнопок мессенджеров. tone: light — на тёмном фоне, brand — в фирменных цветах */
+export const MESSENGERS: Messenger[] = [
+  { id: "whatsapp", label: "WhatsApp", href: SITE.whatsapp, bg: "#25D366", fg: "#FFFFFF", Icon: WhatsAppIcon },
+  { id: "telegram", label: "Telegram", href: SITE.telegram, bg: "#26A5E4", fg: "#FFFFFF", Icon: TelegramIcon },
+  { id: "max", label: "МАКС", href: SITE.max, bg: "#FFFFFF", fg: "#0E1421", Icon: MaxIcon, raster: true },
+];
+
+/** Ряд кнопок мессенджеров с подписями — для футера и блока вопросов */
 export default function Messengers({
-  tone = "brand",
   size = "md",
   className = "",
   prefix,
 }: {
-  tone?: "brand" | "light";
   size?: "sm" | "md";
   className?: string;
-  /** текст, который подставится в сообщение (для WhatsApp) */
+  /** текст, который подставится в сообщение WhatsApp */
   prefix?: string;
 }) {
   return (
@@ -61,15 +67,15 @@ export default function Messengers({
           href={m.id === "whatsapp" && prefix ? m.href + "?text=" + encodeURIComponent(prefix) : m.href}
           target="_blank"
           rel="noreferrer"
+          onClick={() => reachGoal("click_" + m.id)}
           aria-label={m.label}
-          style={tone === "brand" ? { background: m.bg, color: m.fg } : undefined}
+          style={{ background: m.bg, color: m.fg }}
           className={
             "inline-flex items-center gap-2 rounded-full font-bold transition hover:brightness-105 active:scale-95 " +
-            (size === "sm" ? "px-3 py-1.5 text-[12px]" : "px-4 py-2.5 text-[14px]") +
-            (tone === "light" ? " bg-white/10 border border-white/20 text-white hover:bg-white/20" : "")
+            (size === "sm" ? "px-3 py-1.5 text-[12px]" : "px-4 py-2.5 text-[14px]")
           }
         >
-          <m.Icon className={size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4"} />
+          <m.Icon className={size === "sm" ? "w-4 h-4" : "w-[18px] h-[18px]"} />
           {m.label}
         </a>
       ))}

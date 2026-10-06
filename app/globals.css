@@ -170,3 +170,50 @@ textarea {
 .legal a:hover {
   color: #00b377;
 }
+
+/* ===== Пульсирующая кнопка-трубка в мобильной панели ===== */
+@keyframes phone-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 214, 143, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 13px rgba(0, 214, 143, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 214, 143, 0);
+  }
+}
+@keyframes phone-shake {
+  0%,
+  72%,
+  100% {
+    transform: rotate(0deg);
+  }
+  76% {
+    transform: rotate(-14deg);
+  }
+  80% {
+    transform: rotate(12deg);
+  }
+  84% {
+    transform: rotate(-10deg);
+  }
+  88% {
+    transform: rotate(8deg);
+  }
+  92% {
+    transform: rotate(-4deg);
+  }
+}
+.phone-pulse {
+  animation: phone-ring 2s ease-out infinite;
+}
+.phone-pulse svg {
+  animation: phone-shake 2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .phone-pulse,
+  .phone-pulse svg {
+    animation: none;
+  }
+}

@@ -8,7 +8,7 @@ import { MESSENGERS } from "@/components/ui/Messengers";
 import { useQuiz } from "@/components/ui/QuizModal";
 import { reachGoal } from "@/lib/lead";
 
-/** Липкая панель действий на мобильных: звонок, расчёт и три мессенджера. */
+/** Липкая панель на мобильных: пульсирующая трубка, мессенджеры логотипами, расчёт. */
 export default function MobileBar() {
   const { openQuiz } = useQuiz();
   const [show, setShow] = useState(false);
@@ -22,36 +22,33 @@ export default function MobileBar() {
   return (
     <>
       {/* отступ под липкую панель, чтобы она не перекрывала конец страницы */}
-      <div className="md:hidden h-[124px]" aria-hidden="true" />
+      <div className="md:hidden h-[72px]" aria-hidden="true" />
       <AnimatePresence>
-      {show && (
-        <motion.div
-          initial={{ y: 120 }}
-          animate={{ y: 0 }}
-          exit={{ y: 120 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="md:hidden fixed bottom-0 inset-x-0 z-40 p-2 pb-[max(8px,env(safe-area-inset-bottom))]"
-        >
-          <div
-            className="rounded-2xl p-1.5 flex flex-col gap-1.5 shadow-[0_-4px_30px_rgba(0,0,0,0.35)] border border-white/10"
-            style={{ background: "#080B12" }}
+        {show && (
+          <motion.div
+            initial={{ y: 90 }}
+            animate={{ y: 0 }}
+            exit={{ y: 90 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="md:hidden fixed bottom-0 inset-x-0 z-40 px-2 pt-2 pb-[max(8px,env(safe-area-inset-bottom))]"
           >
-            <div className="grid grid-cols-2 gap-1.5">
+            <div
+              className="rounded-2xl p-1.5 flex items-center gap-1.5 shadow-[0_-4px_30px_rgba(0,0,0,0.35)] border border-white/10"
+              style={{ background: "#080B12" }}
+            >
+              {/* Трубка — пульсирует, чтобы притягивать взгляд */}
               <a
                 href={SITE.phoneHref}
                 onClick={() => reachGoal("click_phone")}
-                className="h-12 rounded-xl bg-white/15 border border-white/15 text-white flex items-center justify-center gap-2 text-[14px] font-semibold"
+                aria-label={"Позвонить " + SITE.phone}
+                className="phone-pulse relative w-11 h-11 shrink-0 rounded-full bg-accent text-ink flex items-center justify-center"
               >
-                <Phone className="w-4 h-4" /> Позвонить
+                <Phone className="w-[19px] h-[19px] relative z-10" fill="currentColor" strokeWidth={0} />
               </a>
-              <button
-                onClick={openQuiz}
-                className="h-12 rounded-xl bg-accent text-ink flex items-center justify-center gap-2 text-[14px] font-bold"
-              >
-                <Calculator className="w-4 h-4" /> Рассчитать
-              </button>
-            </div>
-            <div className="grid grid-cols-3 gap-1.5">
+
+              {/* разделитель: слева — звонок, справа — переписка */}
+              <span className="w-px h-7 bg-white/15 shrink-0" aria-hidden="true" />
+
               {MESSENGERS.map((m) => (
                 <a
                   key={m.id}
@@ -59,16 +56,27 @@ export default function MobileBar() {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => reachGoal("click_" + m.id)}
-                  style={{ background: m.bg, color: m.fg }}
-                  className="h-11 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-bold"
+                  aria-label={m.label}
+                  style={m.raster ? undefined : { background: m.bg, color: m.fg }}
+                  className={
+                    "w-11 h-11 shrink-0 flex items-center justify-center active:scale-95 transition-transform " +
+                    (m.raster ? "" : "rounded-full")
+                  }
                 >
-                  <m.Icon className="w-4 h-4" /> {m.label}
+                  <m.Icon className={m.raster ? "w-11 h-11" : "w-[22px] h-[22px]"} />
                 </a>
               ))}
+
+              <button
+                onClick={openQuiz}
+                className="flex-1 min-w-0 h-11 rounded-full bg-white text-ink flex items-center justify-center gap-1.5 text-[13px] font-bold active:scale-95 transition-transform"
+              >
+                <Calculator className="w-4 h-4 shrink-0" />
+                <span className="truncate">Рассчитать</span>
+              </button>
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
       </AnimatePresence>
     </>
   );
