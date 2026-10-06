@@ -2,9 +2,11 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Phone, Check, ShieldCheck, Send, Loader2, MessageCircle } from "lucide-react";
-import { SITE } from "@/lib/site";
+import { X, Phone, Check, ShieldCheck, Send, Loader2 } from "lucide-react";
+import { SITE, base } from "@/lib/site";
 import PhoneInput, { formatRuPhone, isPhoneComplete } from "./PhoneInput";
+import Messengers from "./Messengers";
+import { sendLead } from "@/lib/lead";
 
 export type LeadConfig = {
   /** уникальный идентификатор формы — попадает в заявку как источник */
@@ -78,6 +80,7 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
   const [object, setObject] = useState(OBJECT_TYPES[0]);
   const [time, setTime] = useState(TIMES[0]);
   const [comment, setComment] = useState("");
+  const [agree, setAgree] = useState(false);
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [err, setErr] = useState("");
 
@@ -90,39 +93,33 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
       setErr("Введите номер полностью — мы перезвоним на него");
       return;
     }
+    if (!agree) {
+      setErr("Отметьте согласие на обработку персональных данных");
+      return;
+    }
     setErr("");
     setState("sending");
-    const payload = {
-      source: cfg.source,
-      title: cfg.title,
-      name,
-      phone: formatRuPhone(phone),
-      object: fields.includes("object") ? object : undefined,
-      time: fields.includes("time") ? time : undefined,
-      comment: fields.includes("comment") ? comment : undefined,
-      ...cfg.extra,
-      page: typeof window !== "undefined" ? window.location.href : "",
-      ts: new Date().toISOString(),
-    };
     try {
-      if (SITE.leadWebhook) {
-        await fetch(SITE.leadWebhook, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      } else {
-        await new Promise((r) => setTimeout(r, 700));
-      }
+      await sendLead({
+        Форма: cfg.source,
+        Заголовок: cfg.title,
+        Имя: name || "—",
+        Телефон: formatRuPhone(phone),
+        Объект: fields.includes("object") ? object : undefined,
+        "Удобное время": fields.includes("time") ? time : undefined,
+        Комментарий: fields.includes("comment") ? comment : undefined,
+        ...cfg.extra,
+        Согласие: "да, " + new Date().toLocaleString("ru-RU"),
+      });
       setState("done");
     } catch {
       setState("error");
     }
   };
 
-  const waText = encodeURIComponent(
+  const waText = (
     `Здравствуйте! Заявка с сайта (${cfg.title}).\nИмя: ${name || "—"}\nТелефон: ${phone ? formatRuPhone(phone) : "—"}\nОбъект: ${object}` +
-      (cfg.extra ? "\n" + Object.entries(cfg.extra).map(([k, v]) => `${k}: ${v}`).join("\n") : ""),
+      (cfg.extra ? "\n" + Object.entries(cfg.extra).map(([k, v]) => `${k}: ${v}`).join("\n") : "")
   );
 
   return (
@@ -178,15 +175,9 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
                 </>
               )}
             </p>
-            <div className="mt-6 flex flex-col gap-2">
-              <a
-                href={SITE.whatsapp + "?text=" + waText}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 bg-[#25D366] text-white font-semibold text-sm hover:brightness-95"
-              >
-                <MessageCircle className="w-4 h-4" /> Продублировать в WhatsApp
-              </a>
+            <div className="mt-6 flex flex-col gap-3">
+              <p className="text-[13px] text-gray-500">Хотите переписку вместо звонка? Напишите нам:</p>
+              <Messengers className="justify-center" prefix={waText} />
               <button onClick={onClose} className="text-sm text-gray-500 hover:text-night py-2">
                 Закрыть
               </button>
@@ -266,6 +257,26 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
               </label>
             )}
 
+            <label className="flex items-start gap-2.5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={agree}
+                onChange={(e) => setAgree(e.target.checked)}
+                className="mt-0.5 w-5 h-5 shrink-0 rounded border-gray-300 accent-accent cursor-pointer"
+              />
+              <span className="text-[12px] leading-snug text-gray-500">
+                Я согласен(на) на обработку персональных данных и принимаю{" "}
+                <a href={base("/privacy/")} target="_blank" className="text-night underline decoration-accent underline-offset-2">
+                  политику конфиденциальности
+                </a>{" "}
+                и{" "}
+                <a href={base("/consent/")} target="_blank" className="text-night underline decoration-accent underline-offset-2">
+                  условия согласия
+                </a>
+                .
+              </span>
+            </label>
+
             {err && <p className="text-sm text-alert -mt-1">{err}</p>}
             {state === "error" && (
               <p className="text-sm text-alert">Не удалось отправить. Позвоните нам: {SITE.phone}</p>
@@ -273,7 +284,7 @@ function LeadModal({ cfg, onClose }: { cfg: LeadConfig; onClose: () => void }) {
 
             <button
               type="submit"
-              disabled={state === "sending"}
+              disabled={state === "sending" || !agree}
               className={
                 "mt-1 h-14 rounded-full font-bold text-[15px] text-white flex items-center justify-center gap-2 transition hover:brightness-110 active:scale-[0.98] disabled:opacity-70 " +
                 (cfg.tone === "red" ? "bg-alert shadow-lg shadow-alert/30" : "bg-night shadow-lg shadow-night/30")

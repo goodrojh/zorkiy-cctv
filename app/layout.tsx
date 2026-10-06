@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LeadProvider } from "@/components/ui/LeadProvider";
 import ScrollTop from "@/components/ui/ScrollTop";
+import Metrika from "@/components/ui/Metrika";
 
 export const metadata: Metadata = {
   title: "ЗОРКИЙ — установка видеонаблюдения под ключ в Москве и Московской области",
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ScrollTop />
           {children}
         </LeadProvider>
+        <Metrika />
       </body>
     </html>
   );

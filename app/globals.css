@@ -101,12 +101,6 @@ textarea {
   font: inherit;
 }
 
-@media (max-width: 767px) {
-  body {
-    padding-bottom: 76px;
-  }
-}
-
 /* ===== Мобильные: убираем всё, что заставляет GPU телефона перерисовывать блюр на каждом кадре ===== */
 @media (max-width: 767px) {
   .glass,
@@ -132,4 +126,47 @@ textarea {
   .radar-sweep {
     animation-duration: 4.5s;
   }
+}
+
+/* ===== Юридические страницы (политика, согласие) ===== */
+.legal h2 {
+  font-family: "Chakra Petch", Inter, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.25;
+  color: #0e1421;
+  margin: 2rem 0 0.75rem;
+}
+.legal p {
+  margin: 0 0 0.9rem;
+}
+.legal ul {
+  margin: 0 0 1.1rem;
+  padding-left: 1.1rem;
+  list-style: none;
+}
+.legal li {
+  position: relative;
+  padding-left: 0.9rem;
+  margin-bottom: 0.45rem;
+}
+.legal li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00d68f;
+}
+.legal a {
+  color: #0e1421;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: #00d68f;
+  text-underline-offset: 3px;
+}
+.legal a:hover {
+  color: #00b377;
 }

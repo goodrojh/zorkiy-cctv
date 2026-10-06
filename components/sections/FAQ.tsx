@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, X, Wrench, Camera, CreditCard, Phone } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { useLead } from "@/components/ui/LeadProvider";
+import Messengers from "@/components/ui/Messengers";
 
 const faqData: Record<string, { q: string; a: string }[]> = {
   install: [
@@ -100,6 +101,7 @@ export default function FAQ() {
             <div>
               <p className="font-semibold text-[15px] text-night">Остались вопросы?</p>
               <p className="text-[14px] text-gray-500">Отвечает инженер, не колл-центр · {SITE.hours}</p>
+              <Messengers className="mt-3" size="sm" />
             </div>
           </div>
           <div className="flex gap-2 w-full md:w-auto">

@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { motion } from "@/lib/motion";
 import { Phone, Mail, MapPin, Clock, Send, Check } from "lucide-react";
-import { SITE, media } from "@/lib/site";
+import { SITE, base, media } from "@/lib/site";
+import Messengers from "@/components/ui/Messengers";
 import { Logo } from "./Nav";
 import { useLead } from "@/components/ui/LeadProvider";
 import PhoneInput, { formatRuPhone } from "@/components/ui/PhoneInput";
@@ -95,7 +96,9 @@ export default function Footer() {
                 Установка и обслуживание систем видеонаблюдения в Москве и Московской области с {SITE.since} года. Своя
                 монтажная служба, гарантия 3 года.
               </p>
-              <p className="mt-3 text-white/35 text-[11px]">ООО «Зоркий» · ИНН 7712345678 · ОГРН 1147746000000</p>
+              <p className="mt-3 text-white/35 text-[11px]">
+                {SITE.legal.name} · ИНН {SITE.legal.inn} · ОГРН {SITE.legal.ogrn}
+              </p>
             </div>
             <div>
               <h4 className="text-white text-[13px] font-semibold mb-3">Услуги</h4>
@@ -153,21 +156,14 @@ export default function Footer() {
                   <Clock className="w-4 h-4 text-accent" /> {SITE.hours}
                 </li>
               </ul>
-              <div className="mt-4 flex gap-2">
-                <a href={SITE.whatsapp} target="_blank" rel="noreferrer" className="px-3 py-1.5 rounded-full bg-[#25D366]/20 border border-[#25D366]/40 text-[12px] text-white font-semibold hover:bg-[#25D366]/30">
-                  WhatsApp
-                </a>
-                <a href={SITE.telegram} target="_blank" rel="noreferrer" className="px-3 py-1.5 rounded-full bg-sky-500/20 border border-sky-400/40 text-[12px] text-white font-semibold hover:bg-sky-500/30">
-                  Telegram
-                </a>
-              </div>
+              <Messengers className="mt-4" size="sm" />
             </div>
           </div>
           <div className="mt-6 pt-5 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-3 text-[12px] text-white/40">
             <span>© {new Date().getFullYear()} ЗОРКИЙ. Видеонаблюдение под ключ в Москве и МО.</span>
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <a href="#" className="hover:text-white">Политика конфиденциальности</a>
-              <a href="#" className="hover:text-white">Договор-оферта</a>
+              <a href={base("/privacy/")} className="hover:text-white">Политика обработки персональных данных</a>
+              <a href={base("/consent/")} className="hover:text-white">Согласие на обработку</a>
             </div>
             <a
               href="https://odinpotok.ru"
